@@ -15,7 +15,7 @@ register_heif_opener()
 
 args = arg_parser.parse_args()
 
-paths = load_dir(args.dir)
+paths = load_dir(args.dir, recursive=args.recursive)
 metadata_config = MetadataExtractorConfig(tz=timezone(args.tz))
 
 metadata_df = load_metadata(paths, metadata_config)

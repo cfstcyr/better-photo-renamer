@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "better-renamer"
+version = "0.1.0"
+description = ""
+authors = ["Charles S <cfstcyr.git@pm.me>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pandas = "^2.2.2"
+pillow = "^10.4.0"
+pillow-heif = "^0.18.0"
+exif = "^1.6.0"
+hachoir = "^3.3.0"
+ffmpeg-python = "^0.2.0"
+tqdm = "^4.66.5"
+argparse = "^1.4.0"
+lark = "^1.2.2"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.6.3"
+mypy = "^1.11.2"
+types-pytz = "^2024.1.0.20240417"
+pandas-stubs = "^2.2.2.240807"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -18,8 +18,7 @@ input_args.add_argument(
 input_args.add_argument(
     "--recursive",
     "-r",
-    type=bool,
-    default=False,
+    action="store_true",
     help="Recursively scan directory",
 )
 
@@ -40,4 +39,16 @@ output_args.add_argument(
     type=str,
     default="<date>_<filename>",
     help="New filename format",
+)
+
+arg_parser.add_argument(
+    "--dry-run",
+    action="store_true",
+    help="Do not rename files",
+)
+
+arg_parser.add_argument(
+    "--ask-confirm",
+    action="store_true",
+    help="Ask for confirmation before renaming files",
 )

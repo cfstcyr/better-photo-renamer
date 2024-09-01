@@ -16,3 +16,12 @@ def generate_filename(df: pd.DataFrame, format: str) -> pd.Series | str:
     res = res.rename("new_filename")
 
     return res
+
+
+def generate_path(df: pd.DataFrame, format: str) -> pd.DataFrame:
+    df["new_filename"] = generate_filename(df, format)
+    df["new_path"] = df.apply(
+        lambda row: row["path"].parent / row["new_filename"], axis=1
+    )
+
+    return df[["new_filename", "new_path"]]

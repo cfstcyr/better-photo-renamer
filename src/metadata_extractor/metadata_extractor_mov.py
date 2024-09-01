@@ -1,9 +1,12 @@
 from pathlib import Path
+
 import ffmpeg
+
+from src.utils.datetime import strptime_multi
 from src.utils.errors import ExtractionError
 from src.utils.hash import hash_dict
-from src.utils.datetime import strptime_multi
-from .metadata_extractor import MetadataExtractor, Metadata
+
+from .metadata_extractor import Metadata, MetadataExtractor
 
 CREATION_TIME_TAGS = [
     "com.apple.quicktime.creationdate",

@@ -2,7 +2,6 @@ from typing import Protocol, TypeVar, overload
 
 import pandas as pd
 
-
 T_cov = TypeVar("T_cov", covariant=True)
 T_contra = TypeVar("T_contra", contravariant=True)
 

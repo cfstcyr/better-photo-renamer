@@ -1,7 +1,6 @@
 import os
 import uuid
 
-
 PATH = "/Users/charles-francoisst-cyr/Library/CloudStorage/ProtonDrive-cfstcyr@pm.me-folder/Photos/2024/08 Août - Rome"
 
 for filename in os.listdir(PATH):

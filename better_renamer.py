@@ -1,8 +1,9 @@
 import pandas as pd
 from pillow_heif import register_heif_opener
 from tqdm import tqdm
-from src.tag_extractor import TagExtractor, Tags
+
 from src.cache import PandasPickleCache
+from src.tag_extractor import TagExtractor, Tags
 
 register_heif_opener()
 

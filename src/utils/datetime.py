@@ -1,6 +1,5 @@
-from datetime import tzinfo, datetime
+from datetime import datetime, tzinfo
 from typing import Optional
-
 
 DATETIME_FORMATS = [
     "%Y:%m:%d %H:%M:%S",

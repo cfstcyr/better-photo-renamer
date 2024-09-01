@@ -2,9 +2,12 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import tzinfo
 from pathlib import Path
-from src.utils.errors import ExtractionError
-from .metadata import Metadata
+
 from pytz import timezone
+
+from src.utils.errors import ExtractionError
+
+from .metadata import Metadata
 
 
 @dataclass

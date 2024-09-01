@@ -1,8 +1,10 @@
 from pathlib import Path
+
+from src.utils.errors import FactoryError
+
 from .metadata_extractor import MetadataExtractor, MetadataExtractorConfig
 from .metadata_extractor_image import MetadataExtractorImage
 from .metadata_extractor_mov import MetadataExtractorMov
-from src.utils.errors import FactoryError
 
 METADATA_EXTRACTORS = [
     MetadataExtractorImage,

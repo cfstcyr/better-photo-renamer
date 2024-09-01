@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 
 from src.utils.df import explode_dict
+
 from .metadata_extractor import MetadataExtractorConfig, create_metadata_extractor
 
 

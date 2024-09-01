@@ -1,5 +1,5 @@
-from lark import Lark
 import pandas as pd
+from lark import Lark
 
 from .filename_transformer import FilenameTransformer
 from .grammar import GRAMMAR

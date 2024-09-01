@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import Optional
 
-
 IMAGE_EXT = [".jpeg", ".jpg", ".png", ".heic"]
 VIDEO_EXT = [".mov", ".mp4"]
 

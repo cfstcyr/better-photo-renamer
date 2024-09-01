@@ -3,6 +3,6 @@ from typing import TypedDict
 
 
 class Metadata(TypedDict):
-    id: str
+    metadata_hash: str
     creation_time: datetime
     is_live_photo: bool

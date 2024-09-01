@@ -16,7 +16,7 @@ class FilenameTransformer(Transformer[Any, str | pd.Series]):
         res = ""
 
         for item in items:
-            res += item.astype("str") if isinstance(item, pd.Series) else item
+            res += item.astype("str") if isinstance(item, pd.Series) else str(item)
 
         return res
 

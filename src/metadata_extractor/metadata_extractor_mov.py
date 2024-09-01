@@ -1,7 +1,7 @@
 from pathlib import Path
 import ffmpeg
 from src.utils.errors import ExtractionError
-from src.utils.hash import hash_dict, hash_to_str
+from src.utils.hash import hash_dict
 from src.utils.datetime import strptime_multi
 from .metadata_extractor import MetadataExtractor, Metadata
 
@@ -25,7 +25,7 @@ class MetadataExtractorMov(MetadataExtractor):
             raise ExtractionError(f"Date not found in tags: {probe['format']['tags']}")
 
         return Metadata(
-            id=hash_to_str(hash_dict(probe["format"]["tags"])),
+            metadata_hash=hash_dict(probe["format"]["tags"]),
             creation_time=strptime_multi(
                 probe["format"]["tags"][datetime_tag],
                 tz=self.config.tz,

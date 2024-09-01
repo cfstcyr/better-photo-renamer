@@ -29,6 +29,6 @@ def load_metadata(
 
     df.loc[:, metadata_df.columns] = metadata_df
     df = df.drop(columns=["metadata"])
-    df = df.sort_values(by=["creation_time", "id"]).reset_index(drop=True)
+    df = df.sort_values(by=["creation_time", "metadata_hash"]).reset_index(drop=True)
 
     return df

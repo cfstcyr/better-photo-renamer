@@ -1,6 +1,13 @@
-def hash_dict(d: dict) -> int:
-    return hash(frozenset(d.items()))
+import hashlib
 
 
-def hash_to_str(h: int) -> str:
-    return str(hex(h))[2:][::-1].upper()
+def hash_dict(d: dict) -> str:
+    m = hashlib.md5()
+
+    for key, value in d.items():
+        m.update(str(key).encode())
+        m.update(":".encode())
+        m.update(str(value).encode())
+        m.update(";".encode())
+
+    return m.hexdigest()

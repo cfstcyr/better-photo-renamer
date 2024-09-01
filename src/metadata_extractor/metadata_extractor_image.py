@@ -1,8 +1,9 @@
 from datetime import datetime
 import logging
 from pathlib import Path
+
 from .metadata_extractor import MetadataExtractor, Metadata
-from src.utils.hash import hash_dict, hash_to_str
+from src.utils.hash import hash_dict
 from src.utils.datetime import strptime_multi
 from PIL import Image
 from PIL.ExifTags import TAGS
@@ -42,7 +43,7 @@ class MetadataExtractorImage(MetadataExtractor):
             )
 
         return Metadata(
-            id=hash_to_str(hash_dict(tags)),
+            metadata_hash=hash_dict(tags),
             creation_time=creation_time,
             is_live_photo=False,
         )

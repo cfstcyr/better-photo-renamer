@@ -27,6 +27,10 @@ args = arg_parser.parse_args()
 paths = load_dir(args.dir, recursive=args.recursive)
 metadata_config = MetadataExtractorConfig(tz=timezone(args.tz))
 
+if not paths:
+    logger.info("No files found")
+    exit()
+
 metadata_df = load_metadata(paths, metadata_config)
 
 if args.group:

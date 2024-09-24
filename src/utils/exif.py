@@ -1,12 +1,17 @@
 import piexif
 
 codec = "ISO-8859-1"  # or latin-1
+IGNORED_TAGS = [
+    "thumbnail",
+]
 
 
 def exif_to_tag(exif_dict):
     exif_tag_dict = {}
 
     for ifd in exif_dict:
+        if ifd in IGNORED_TAGS:
+            continue
         if exif_dict[ifd] is None:
             continue
 

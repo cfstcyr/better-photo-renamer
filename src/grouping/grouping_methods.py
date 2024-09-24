@@ -22,6 +22,7 @@ def _group_k_means_auto(
     metadata_df: pd.DataFrame, group_cols: list[str], *, k_max: int
 ) -> pd.DataFrame:
     score, best_k, result = -1, -1, None
+    lower_score_count = 0
 
     for k in tqdm(range(2, k_max + 1)):
         k_means = KMeans(n_clusters=k, random_state=0)
@@ -32,6 +33,13 @@ def _group_k_means_auto(
             score = new_score
             best_k = k
             result = labels
+            lower_score_count = 0
+        else:
+            lower_score_count += 1
+
+            # Stop if the score is decreasing, but only after a few iterations (trying to ignore local minima)
+            if lower_score_count > 5:
+                break
 
     logger.info(f"Grouped into optimal {best_k} groups")
 

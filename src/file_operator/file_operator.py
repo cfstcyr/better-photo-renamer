@@ -53,7 +53,7 @@ def dry_run_file(src: str | Path, dest: str | Path, *, force: bool = False) -> N
 
     _check_overwrite(dest, force=force)
 
-    logger.info(f"Would rename {src} to {dest}")
+    logger.info(f"Would rename \n\t{src} to \n\t{dest}")
 
 
 FILE_OPERATORS: dict[str, FileOperator] = {

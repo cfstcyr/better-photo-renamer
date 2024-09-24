@@ -4,6 +4,7 @@ from typing import Callable, Literal
 import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
+from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +23,7 @@ def _group_k_means_auto(
 ) -> pd.DataFrame:
     score, best_k, result = -1, -1, None
 
-    for k in range(2, k_max + 1):
+    for k in tqdm(range(2, k_max + 1)):
         k_means = KMeans(n_clusters=k, random_state=0)
         labels = k_means.fit_predict(metadata_df[group_cols])
         new_score = silhouette_score(metadata_df[group_cols], labels)
@@ -32,7 +33,7 @@ def _group_k_means_auto(
             best_k = k
             result = labels
 
-    logger.info(f"Best k: {best_k}, silhouette score: {score}")
+    logger.info(f"Grouped into optimal {best_k} groups")
 
     metadata_df["group"] = result
 

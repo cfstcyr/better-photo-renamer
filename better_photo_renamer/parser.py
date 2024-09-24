@@ -57,7 +57,7 @@ output_args = arg_parser.add_argument_group(
 output_args.add_argument(
     "--filename",
     type=str,
-    default="<date>_<filename>",
+    required=True,
     help="New filename format",
 )
 

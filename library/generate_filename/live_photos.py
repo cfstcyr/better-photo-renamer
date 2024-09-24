@@ -1,6 +1,6 @@
 import pandas as pd
 
-from src.utils.df import split_match
+from library.utils.df import split_match
 
 
 def split_live_photos(metadata_df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:

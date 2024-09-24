@@ -2,7 +2,7 @@ import logging
 
 import pandas as pd
 
-from src.grouping.grouping_transformer import GroupingArgs
+from library.grouping.grouping_transformer import GroupingArgs
 
 from .grouping_methods import GROUPING_METHODS
 

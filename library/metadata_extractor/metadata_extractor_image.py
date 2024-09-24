@@ -5,10 +5,10 @@ from pathlib import Path
 import piexif
 from PIL import Image
 
-from src.utils.datetime import strptime_multi
-from src.utils.exif import exif_to_tag
-from src.utils.gps import convert_gps_to_decimal
-from src.utils.hash import hash_dict
+from library.utils.datetime import strptime_multi
+from library.utils.exif import exif_to_tag
+from library.utils.gps import convert_gps_to_decimal
+from library.utils.hash import hash_dict
 
 from .metadata_extractor import Metadata, MetadataExtractor
 

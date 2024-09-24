@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from src.utils.errors import FactoryError
+from library.utils.errors import FactoryError
 
 from .metadata_extractor import MetadataExtractor, MetadataExtractorConfig
 from .metadata_extractor_image import MetadataExtractorImage

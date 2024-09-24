@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 
-from src.file_operator.file_operator import FILE_OPERATORS
+from library.file_operator.file_operator import FILE_OPERATORS
 
 arg_parser = ArgumentParser()
 

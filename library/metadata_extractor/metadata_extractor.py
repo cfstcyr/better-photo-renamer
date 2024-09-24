@@ -5,7 +5,7 @@ from pathlib import Path
 
 from pytz import timezone
 
-from src.utils.errors import ExtractionError
+from library.utils.errors import ExtractionError
 
 from .metadata import Metadata
 

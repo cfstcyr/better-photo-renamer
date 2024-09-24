@@ -4,17 +4,17 @@ from pillow_heif import register_heif_opener
 from pytz import timezone
 from rich.logging import RichHandler
 
-from src.file_operator.file_operator import FILE_OPERATORS
-from src.grouping import parse_grouping_args
-from src.grouping.grouping import group_by_metadata
+from library.accessors import *  # noqa: F403
+from library.apply_changes import apply_changes
+from library.file_operator.file_operator import FILE_OPERATORS
+from library.generate_filename import generate_path
+from library.generate_filename.live_photos import merge_live_photos, split_live_photos
+from library.grouping import parse_grouping_args
+from library.grouping.grouping import group_by_metadata
+from library.load_dir import load_dir
+from library.load_metadata import load_metadata
+from library.metadata_extractor.metadata_extractor import MetadataExtractorConfig
 
-from .accessors import *  # noqa: F403
-from .apply_changes import apply_changes
-from .generate_filename import generate_path
-from .generate_filename.live_photos import merge_live_photos, split_live_photos
-from .load_dir import load_dir
-from .load_metadata import load_metadata
-from .metadata_extractor.metadata_extractor import MetadataExtractorConfig
 from .parser import arg_parser
 
 logging.basicConfig(level=logging.INFO, handlers=[RichHandler()])

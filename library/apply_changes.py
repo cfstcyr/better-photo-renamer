@@ -3,8 +3,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from src.file_operator.file_operator import FileOperator
-from src.utils.input import confirm
+from library.file_operator.file_operator import FileOperator
+from library.utils.input import confirm
 
 logger = logging.getLogger(__name__)
 

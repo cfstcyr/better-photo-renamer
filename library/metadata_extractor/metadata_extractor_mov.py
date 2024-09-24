@@ -2,9 +2,9 @@ from pathlib import Path
 
 import ffmpeg
 
-from src.utils.datetime import strptime_multi
-from src.utils.errors import ExtractionError
-from src.utils.hash import hash_dict
+from library.utils.datetime import strptime_multi
+from library.utils.errors import ExtractionError
+from library.utils.hash import hash_dict
 
 from .metadata_extractor import Metadata, MetadataExtractor
 

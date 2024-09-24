@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 from typing import Protocol
 
-from src.utils.input import confirm
+from library.utils.input import confirm
 
 logger = logging.getLogger(__name__)
 

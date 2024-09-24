@@ -31,7 +31,6 @@ metadata_df = load_metadata(paths, metadata_config)
 
 if args.group:
     group_args = parse_grouping_args(args.group)
-    print(group_args)
     metadata_df = group_by_metadata(metadata_df, group_args)
 
 n_files = len(metadata_df)

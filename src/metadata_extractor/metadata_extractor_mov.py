@@ -36,6 +36,6 @@ class MetadataExtractorMov(MetadataExtractor):
             ),
             is_live_photo="com.apple.quicktime.live-photo.auto"
             in probe["format"]["tags"],
-            gps_latitude=-1,
-            gps_longitude=-1,
+            lat=-1,
+            long=-1,
         )

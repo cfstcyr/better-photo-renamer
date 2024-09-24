@@ -4,6 +4,24 @@ from src.file_operator.file_operator import FILE_OPERATORS
 
 arg_parser = ArgumentParser()
 
+arg_parser.add_argument(
+    "--ask-confirm",
+    action="store_true",
+    help="Ask for confirmation before renaming files",
+)
+
+transform_args = arg_parser.add_argument_group(
+    "Transform",
+    "Transform options",
+)
+
+transform_args.add_argument(
+    "--group",
+    "-g",
+    type=str,
+    help="Group photos by metadata",
+)
+
 input_args = arg_parser.add_argument_group(
     "Input",
     "Input options",
@@ -43,16 +61,10 @@ output_args.add_argument(
     help="New filename format",
 )
 
-arg_parser.add_argument(
+output_args.add_argument(
     "--operator",
     "-o",
     choices=FILE_OPERATORS.keys(),
     default="rename",
     help="Operation to perform. Use 'dry-run' to simulate renaming",
-)
-
-arg_parser.add_argument(
-    "--ask-confirm",
-    action="store_true",
-    help="Ask for confirmation before renaming files",
 )

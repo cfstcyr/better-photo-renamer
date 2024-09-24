@@ -30,6 +30,7 @@ def rename_file(src: str | Path, dest: str | Path, *, force: bool = False) -> No
 
     _check_overwrite(dest, force=force)
 
+    dest.parent.mkdir(parents=True, exist_ok=True)
     src.rename(dest)
 
     logger.info(f"Renamed {src} to {dest}")

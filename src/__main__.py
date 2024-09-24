@@ -5,6 +5,8 @@ from pytz import timezone
 from rich.logging import RichHandler
 
 from src.file_operator.file_operator import FILE_OPERATORS
+from src.grouping import parse_grouping_args
+from src.grouping.grouping import group_by_metadata
 
 from .accessors import *  # noqa: F403
 from .apply_changes import apply_changes
@@ -27,12 +29,21 @@ metadata_config = MetadataExtractorConfig(tz=timezone(args.tz))
 
 metadata_df = load_metadata(paths, metadata_config)
 
+if args.group:
+    group_args = parse_grouping_args(args.group)
+    print(group_args)
+    metadata_df = group_by_metadata(metadata_df, group_args)
+
 n_files = len(metadata_df)
 logger.info(f"Processing {n_files} files")
 
 metadata_df, metadata_live_df = split_live_photos(metadata_df)
 metadata_df[["new_filename", "new_path"]] = generate_path(metadata_df, args.filename)
-metadata_rename_df = merge_live_photos(metadata_live_df, metadata_df)
+
+if not metadata_live_df.empty:
+    metadata_rename_df = merge_live_photos(metadata_live_df, metadata_df)
+else:
+    metadata_rename_df = metadata_df
 
 if metadata_rename_df["new_path"].duplicated().any():
     raise ValueError("Duplicate paths")

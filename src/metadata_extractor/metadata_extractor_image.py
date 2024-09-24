@@ -26,10 +26,10 @@ class MetadataExtractorImage(MetadataExtractor):
             metadata_hash=hash_dict(tags),
             creation_time=self._extract_creation_time(path, tags),
             is_live_photo=False,
-            gps_latitude=convert_gps_to_decimal(tags["GPS"]["GPSLatitude"])
+            lat=convert_gps_to_decimal(tags["GPS"]["GPSLatitude"])
             if self._has_gps_data(tags)
             else -1,
-            gps_longitude=convert_gps_to_decimal(tags["GPS"]["GPSLongitude"])
+            long=convert_gps_to_decimal(tags["GPS"]["GPSLongitude"])
             if self._has_gps_data(tags)
             else -1,
         )

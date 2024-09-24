@@ -42,6 +42,7 @@ TAGS: dict[str, TagFn] = {
     ),
     "uuid": tag_uuid,
     "hash": tag_fn_wrapper("metadata_hash", lambda series: series),
-    "lat": tag_fn_wrapper("gps_latitude", tag_number),
-    "long": tag_fn_wrapper("gps_longitude", tag_number),
+    "lat": tag_fn_wrapper("lat", tag_number),
+    "long": tag_fn_wrapper("long", tag_number),
+    "group": tag_fn_wrapper("group", tag_number),
 }

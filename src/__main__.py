@@ -2,17 +2,18 @@ import logging
 
 from pillow_heif import register_heif_opener
 from pytz import timezone
-from rich import print as rprint
 from rich.logging import RichHandler
 
+from src.file_operator.file_operator import FILE_OPERATORS
+
 from .accessors import *  # noqa: F403
+from .apply_changes import apply_changes
 from .generate_filename import generate_path
 from .generate_filename.live_photos import merge_live_photos, split_live_photos
 from .load_dir import load_dir
 from .load_metadata import load_metadata
 from .metadata_extractor.metadata_extractor import MetadataExtractorConfig
 from .parser import arg_parser
-from .rename_files import rename_files
 
 logging.basicConfig(level=logging.INFO, handlers=[RichHandler()])
 register_heif_opener()
@@ -20,8 +21,6 @@ register_heif_opener()
 logger = logging.getLogger(__name__)
 
 args = arg_parser.parse_args()
-
-print(args)
 
 paths = load_dir(args.dir, recursive=args.recursive)
 metadata_config = MetadataExtractorConfig(tz=timezone(args.tz))
@@ -52,9 +51,9 @@ if len(metadata_rename_df) == 0:
     logger.info("No files to rename")
     exit()
 
-rename_files(
+apply_changes(
     paths=metadata_rename_df["path"],
     new_paths=metadata_rename_df["new_path"],
+    file_operator=FILE_OPERATORS[args.operator],
     ask_confirm=args.ask_confirm,
-    dry_run=args.dry_run,
 )

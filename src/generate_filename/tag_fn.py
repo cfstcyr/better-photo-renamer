@@ -10,11 +10,16 @@ def tag_datetime(series: pd.Series, format: str = "%Y-%m-%d_%H-%M-%S") -> pd.Ser
     return series.dt.strftime(format)
 
 
-def tag_number(series: pd.Series, pad: Optional[int] = None) -> pd.Series:
-    res = series.astype("str")
+def tag_number(
+    series: pd.Series, *, round: Optional[int] = None, pad: Optional[int] = None
+) -> pd.Series:
+    res = series
+
+    if round is not None:
+        res = res.round(round)
 
     if pad is not None:
-        res = res.str.pad(pad, "left", "0")
+        res = res.astype("str").str.pad(pad, "left", "0")
 
     return res
 
@@ -37,4 +42,6 @@ TAGS: dict[str, TagFn] = {
     ),
     "uuid": tag_uuid,
     "hash": tag_fn_wrapper("metadata_hash", lambda series: series),
+    "lat": tag_fn_wrapper("gps_latitude", tag_number),
+    "long": tag_fn_wrapper("gps_longitude", tag_number),
 }

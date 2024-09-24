@@ -1,5 +1,7 @@
 from argparse import ArgumentParser
 
+from src.file_operator.file_operator import FILE_OPERATORS
+
 arg_parser = ArgumentParser()
 
 input_args = arg_parser.add_argument_group(
@@ -42,9 +44,11 @@ output_args.add_argument(
 )
 
 arg_parser.add_argument(
-    "--dry-run",
-    action="store_true",
-    help="Do not rename files",
+    "--operator",
+    "-o",
+    choices=FILE_OPERATORS.keys(),
+    default="rename",
+    help="Operation to perform. Use 'dry-run' to simulate renaming",
 )
 
 arg_parser.add_argument(

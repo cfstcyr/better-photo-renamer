@@ -40,6 +40,14 @@ TAGS: dict[str, TagFn] = {
     "filename": tag_fn_wrapper(
         lambda df: df["path"].map(lambda x: x.stem), lambda series: series
     ),
+    "duplicate_name": tag_fn_wrapper(
+        lambda df: df["duplicate"].map(
+            lambda x: pd.NA if isinstance(x, float) else x.stem
+        )
+        if "duplicate" in df
+        else pd.Series([pd.NA] * len(df)),
+        lambda series: series,
+    ),
     "uuid": tag_uuid,
     "hash": tag_fn_wrapper("metadata_hash", lambda series: series),
     "lat": tag_fn_wrapper("lat", tag_number),

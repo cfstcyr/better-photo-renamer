@@ -7,6 +7,8 @@ from rich.logging import RichHandler
 
 from library.accessors import *  # noqa: F403
 from library.apply_changes import apply_changes
+from library.cache import PandasPickleCache
+from library.detect_duplicate import detect_duplicate
 from library.file_operator.file_operator import FILE_OPERATORS
 from library.generate_filename import generate_path
 from library.generate_filename.live_photos import merge_live_photos, split_live_photos
@@ -18,14 +20,16 @@ from library.metadata_extractor.metadata_extractor import MetadataExtractorConfi
 
 from .parser import arg_parser
 
-logging.basicConfig(level=logging.INFO, handlers=[RichHandler()])
+args = arg_parser.parse_args()
+
+level = logging.DEBUG if args.verbose else logging.INFO
+logging.basicConfig(level=level, handlers=[RichHandler()])
 register_heif_opener()
 
 logger = logging.getLogger(__name__)
 
 start = datetime.now()
 
-args = arg_parser.parse_args()
 
 paths = load_dir(args.dir, recursive=args.recursive)
 metadata_config = MetadataExtractorConfig(
@@ -37,14 +41,20 @@ if not paths:
     logger.info("No files found")
     exit()
 
-metadata_df = load_metadata(paths, metadata_config)
+metadata_cache = PandasPickleCache("metadata_cache.pkl")
+metadata_df = load_metadata(paths, metadata_config, cache=metadata_cache)
 
 if args.group:
     group_args = parse_grouping_args(args.group)
     metadata_df = group_by_metadata(metadata_df, group_args)
 
+if metadata_config.extract_content_hash:
+    metadata_df["duplicate"] = detect_duplicate(metadata_df)
+
 n_files = len(metadata_df)
 logger.info(f"Processing {n_files} files")
+
+print(metadata_df)
 
 metadata_df, metadata_live_df = split_live_photos(metadata_df)
 metadata_df[["new_filename", "new_path"]] = generate_path(metadata_df, args.filename)

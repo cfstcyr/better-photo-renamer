@@ -10,6 +10,12 @@ arg_parser.add_argument(
     help="Ask for confirmation before renaming files",
 )
 
+arg_parser.add_argument(
+    "--verbose",
+    action="store_true",
+    help="Show debug messages",
+)
+
 transform_args = arg_parser.add_argument_group(
     "Transform",
     "Transform options",

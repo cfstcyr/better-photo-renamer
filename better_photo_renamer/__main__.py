@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 from pillow_heif import register_heif_opener
 from pytz import timezone
@@ -22,10 +23,15 @@ register_heif_opener()
 
 logger = logging.getLogger(__name__)
 
+start = datetime.now()
+
 args = arg_parser.parse_args()
 
 paths = load_dir(args.dir, recursive=args.recursive)
-metadata_config = MetadataExtractorConfig(tz=timezone(args.tz))
+metadata_config = MetadataExtractorConfig(
+    tz=timezone(args.tz),
+    extract_content_hash=args.extract_content_hash,
+)
 
 if not paths:
     logger.info("No files found")
@@ -71,3 +77,5 @@ apply_changes(
     file_operator=FILE_OPERATORS[args.operator],
     ask_confirm=args.ask_confirm,
 )
+
+logger.info(f"Finished in {datetime.now() - start}")

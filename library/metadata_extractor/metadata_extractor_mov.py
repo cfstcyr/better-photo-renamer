@@ -28,6 +28,7 @@ class MetadataExtractorMov(MetadataExtractor):
 
         return Metadata(
             metadata_hash=hash_dict(probe["format"]["tags"]),
+            content_hash=None,
             creation_time=self._extract_creation_time(path, probe["format"]["tags"]),
             is_live_photo="com.apple.quicktime.live-photo.auto"
             in probe["format"]["tags"],

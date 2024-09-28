@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pandas as pd
+from tqdm import tqdm
 
 from library.utils.df import explode_dict
 
@@ -13,11 +14,15 @@ def load_metadata(
     df = pd.DataFrame(
         {
             "path": paths,
-            "metadata": map(
-                lambda x: create_metadata_extractor(x, config=metadata_config).extract(
-                    x
+            "metadata": tqdm(
+                (
+                    create_metadata_extractor(path, config=metadata_config).extract(
+                        path
+                    )
+                    for path in paths
                 ),
-                paths,
+                total=len(paths),
+                desc="Extracting metadata",
             ),
         }
     )

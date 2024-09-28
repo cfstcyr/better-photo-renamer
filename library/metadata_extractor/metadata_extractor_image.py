@@ -1,6 +1,7 @@
 import logging
 from pathlib import Path
 
+import numpy as np
 import piexif
 from PIL import Image
 
@@ -22,9 +23,15 @@ class MetadataExtractorImage(MetadataExtractor):
         tags = exif_to_tag(piexif.load(img.info.get("exif")))
 
         lat, long = self._extract_gps_data(path, tags)
+        content_hash = (
+            self._extract_content_hash(path, img)
+            if self.config.extract_content_hash
+            else None
+        )
 
         return Metadata(
             metadata_hash=hash_dict(tags),
+            content_hash=content_hash,
             creation_time=self._extract_creation_time(path, tags),
             is_live_photo=False,
             lat=lat,
@@ -40,6 +47,15 @@ class MetadataExtractorImage(MetadataExtractor):
 
         logger.warning(f"No GPS data found in {path}")
         return -1, -1
+
+    def _extract_content_hash(self, path: Path, img: Image.Image) -> np.ndarray:
+        img = img.resize((100, 100), Image.Resampling.LANCZOS)
+        img = img.convert("L")
+
+        pixel_data = list(img.getdata())  # type: ignore
+        avg_pixel = sum(pixel_data) / len(pixel_data)
+
+        return np.fromiter((1 if pixel > avg_pixel else 0 for pixel in pixel_data), int)
 
     def _has_gps_data(self, tags: dict):
         return (

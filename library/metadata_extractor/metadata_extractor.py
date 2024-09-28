@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class MetadataExtractorConfig:
     tz: tzinfo = timezone("Europe/Paris")
+    extract_content_hash: bool = False
 
 
 class MetadataExtractor(ABC):

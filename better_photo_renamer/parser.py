@@ -22,6 +22,12 @@ transform_args.add_argument(
     help="Group photos by metadata",
 )
 
+transform_args.add_argument(
+    "--extract-content-hash",
+    action="store_false",
+    help="Compute content hash (slow operation)",
+)
+
 input_args = arg_parser.add_argument_group(
     "Input",
     "Input options",

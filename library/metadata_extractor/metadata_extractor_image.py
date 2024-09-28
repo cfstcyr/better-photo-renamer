@@ -22,21 +22,14 @@ class MetadataExtractorImage(MetadataExtractor):
         img = Image.open(path)
         tags = exif_to_tag(piexif.load(img.info.get("exif")))
 
-        has_gps_data = self._has_gps_data(tags)
-
-        if not has_gps_data:
-            logger.warning(f"No GPS data found in {path}")
+        lat, long = self._extract_gps_data(path, tags)
 
         return Metadata(
             metadata_hash=hash_dict(tags),
             creation_time=self._extract_creation_time(path, tags),
             is_live_photo=False,
-            lat=convert_gps_to_decimal(tags["GPS"]["GPSLatitude"])
-            if has_gps_data
-            else -1,
-            long=convert_gps_to_decimal(tags["GPS"]["GPSLongitude"])
-            if has_gps_data
-            else -1,
+            lat=lat,
+            long=long,
         )
 
     def _extract_creation_time(self, path: Path, tags: dict):
@@ -56,6 +49,16 @@ class MetadataExtractorImage(MetadataExtractor):
             )
 
         return creation_time
+
+    def _extract_gps_data(self, path: Path, tags: dict) -> tuple[float, float]:
+        if self._has_gps_data(tags):
+            return (
+                convert_gps_to_decimal(tags["GPS"]["GPSLatitude"]),
+                convert_gps_to_decimal(tags["GPS"]["GPSLongitude"]),
+            )
+
+        logger.warning(f"No GPS data found in {path}")
+        return -1, -1
 
     def _has_gps_data(self, tags: dict):
         return (

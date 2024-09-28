@@ -10,7 +10,7 @@ GRAMMAR = rf"""
     ?params_v: param_v ["," (params_v | params_k)]  -> params_v
     ?params_k: param_k ["," params_k]               -> params_k
 
-    ?param_v: STRING | NUMBER
+    ?param_v: STRING | NUMBER | tag
     ?param_k: NAME "=" param_v  -> param_k
 
     NAME: /([A-Za-z0-9]| |-|_|\/)+/

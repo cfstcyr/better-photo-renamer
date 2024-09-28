@@ -29,10 +29,11 @@ class FilenameTransformer(Transformer[Any, str | pd.Series]):
     def tag_params(self, items):
         tag, args = items
 
-        args_dict = {k: v for k, v in args.items() if isinstance(k, int)}
+        args_list = list({k: v for k, v in args.items() if isinstance(k, int)}.values())
+        args_list.reverse()
         kwargs_dict = {k: v for k, v in args.items() if isinstance(k, str)}
 
-        return TAGS[tag](self.df, *args_dict.values(), **kwargs_dict)
+        return TAGS[tag](self.df, *args_list, **kwargs_dict)
 
     def params_v(self, items):
         curr, next = items

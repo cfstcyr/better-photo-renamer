@@ -1,11 +1,9 @@
 import logging
-from datetime import datetime
 from pathlib import Path
 
 import piexif
 from PIL import Image
 
-from library.utils.datetime import strptime_multi
 from library.utils.exif import exif_to_tag
 from library.utils.gps import convert_gps_to_decimal
 from library.utils.hash import hash_dict
@@ -16,7 +14,8 @@ logger = logging.getLogger(__name__)
 
 
 class MetadataExtractorImage(MetadataExtractor):
-    allowed_extensions = [".jpg", ".jpeg", ".png", ".heic"]
+    _allowed_extensions = [".jpg", ".jpeg", ".png", ".heic"]
+    _creation_time_keys = ["0th.DateTime"]
 
     def _extract(self, path: Path) -> Metadata:
         img = Image.open(path)
@@ -31,24 +30,6 @@ class MetadataExtractorImage(MetadataExtractor):
             lat=lat,
             long=long,
         )
-
-    def _extract_creation_time(self, path: Path, tags: dict):
-        if "DateTime" in tags["0th"]:
-            creation_time = strptime_multi(
-                tags["0th"]["DateTime"],
-                tz=self.config.tz,
-                default_format="%Y:%m:%d %H:%M:%S",
-            )
-        else:
-            creation_time = datetime.fromtimestamp(
-                path.stat().st_ctime, tz=self.config.tz
-            )
-            logger.warning(
-                f"Could not find creation time in {path}. "
-                f"Using file creation time {creation_time}. "
-            )
-
-        return creation_time
 
     def _extract_gps_data(self, path: Path, tags: dict) -> tuple[float, float]:
         if self._has_gps_data(tags):

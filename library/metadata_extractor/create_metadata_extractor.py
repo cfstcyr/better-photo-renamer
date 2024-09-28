@@ -6,7 +6,7 @@ from .metadata_extractor import MetadataExtractor, MetadataExtractorConfig
 from .metadata_extractor_image import MetadataExtractorImage
 from .metadata_extractor_mov import MetadataExtractorMov
 
-METADATA_EXTRACTORS = [
+METADATA_EXTRACTORS: list[type[MetadataExtractor]] = [
     MetadataExtractorImage,
     MetadataExtractorMov,
 ]
@@ -18,8 +18,10 @@ def create_metadata_extractor(
     path = Path(path)
 
     for extractor in METADATA_EXTRACTORS:
-        if path.suffix.lower() in extractor.allowed_extensions:
+        if extractor.can_extract(path):
             return extractor(config)
+        # if path.suffix.lower() in extractor._allowed_extensions:
+        #     return extractor(config)
 
     raise FactoryError(
         f"Cannot create MetadataExtractor: Unsupported file extension: {path.suffix}"

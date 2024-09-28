@@ -20,8 +20,6 @@ def create_metadata_extractor(
     for extractor in METADATA_EXTRACTORS:
         if extractor.can_extract(path):
             return extractor(config)
-        # if path.suffix.lower() in extractor._allowed_extensions:
-        #     return extractor(config)
 
     raise FactoryError(
         f"Cannot create MetadataExtractor: Unsupported file extension: {path.suffix}"

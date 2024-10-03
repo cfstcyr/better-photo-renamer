@@ -1,5 +1,9 @@
+import logging
+
 import numpy as np
 import pandas as pd
+
+logger = logging.getLogger(__name__)
 
 
 def _set_index_metadata(metadata_df: pd.DataFrame, *, prefix: str = "") -> pd.DataFrame:
@@ -47,10 +51,15 @@ def _set_index_metadata(metadata_df: pd.DataFrame, *, prefix: str = "") -> pd.Da
 
 
 def index_metadata(metadata_df: pd.DataFrame) -> pd.DataFrame:
+    logger.info("Indexing metadata")
     metadata_df = _set_index_metadata(metadata_df)
 
     if "group" in metadata_df.columns:
+        logger.info("Indexing metadata by group")
+
         for group_index, group in metadata_df.groupby("group"):
+            logger.info(f"Indexing group {group_index}")
+
             indexed_group = _set_index_metadata(group, prefix="group_")
 
             for col in indexed_group.columns:

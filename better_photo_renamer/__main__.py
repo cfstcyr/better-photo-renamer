@@ -61,12 +61,6 @@ metadata_df = index_metadata(metadata_df)
 n_files = len(metadata_df)
 logger.info(f"Processing {n_files} files")
 
-display_df = metadata_df.copy()
-display_df["path"] = display_df["path"].apply(lambda x: x.name)
-display_df["duplicate"] = (
-    display_df["duplicate"].fillna("").apply(lambda x: x.name if x else "")
-)
-
 metadata_df[["new_filename", "new_path"]] = generate_path(metadata_df, args.filename)
 
 if not metadata_live_df.empty:

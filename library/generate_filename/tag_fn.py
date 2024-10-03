@@ -3,6 +3,8 @@ from typing import Optional
 
 import pandas as pd
 
+from library.utils.series import Pad, pad_series
+
 from .tag_fn_wrapper import TagFn, tag_fn_wrapper
 
 
@@ -11,7 +13,11 @@ def tag_datetime(series: pd.Series, format: str = "%Y-%m-%d_%H-%M-%S") -> pd.Ser
 
 
 def tag_number(
-    series: pd.Series, *, round: Optional[int] = None, pad: Optional[int] = None
+    series: pd.Series,
+    *,
+    round: Optional[int] = None,
+    pad: Optional[Pad] = None,
+    pad_fill: str = "0",
 ) -> pd.Series:
     res = series
 
@@ -19,13 +25,28 @@ def tag_number(
         res = res.round(round)
 
     if pad is not None:
-        res = res.astype("str").str.pad(pad, "left", "0")
+        res = pad_series(res, pad, pad_fill)
 
     return res
 
 
 def tag_uuid(df: pd.DataFrame) -> pd.Series:
     return pd.Series([str(uuid.uuid4()) for _ in range(len(df))], index=df.index)
+
+
+def tag_index_str(prefix: str = "") -> TagFn:
+    def tag_index_str_fn(df: pd.DataFrame, *, sep: str = "-") -> pd.Series:
+        res = pad_series(df[f"{prefix}original_index"].astype("str"), pad="auto")
+        res.loc[df["duplicate_index"].notnull()] += sep + pad_series(
+            df.loc[df[f"{prefix}duplicate_index"].notnull()]["duplicate_index"].astype(
+                "str"
+            ),
+            pad="auto",
+        )
+
+        return res
+
+    return tag_index_str_fn
 
 
 def tag_if_exists(
@@ -64,9 +85,11 @@ def tag_concat(df: pd.DataFrame, *args: pd.Series | str) -> pd.Series:
 TAGS: dict[str, TagFn] = {
     "date": tag_fn_wrapper("creation_time", tag_datetime),
     "index": tag_fn_wrapper("global_index", tag_number),
+    "index_str": tag_index_str(),
     "original_index": tag_fn_wrapper("original_index", tag_number),
     "duplicate_index": tag_fn_wrapper("duplicate_index", tag_number),
     "group_index": tag_fn_wrapper("group_global_index", tag_number),
+    "group_index_str": tag_index_str("group_"),
     "group_original_index": tag_fn_wrapper("group_original_index", tag_number),
     "group_duplicate_index": tag_fn_wrapper("group_duplicate_index", tag_number),
     "filename": tag_fn_wrapper(

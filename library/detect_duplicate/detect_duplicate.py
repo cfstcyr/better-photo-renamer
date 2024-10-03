@@ -1,7 +1,12 @@
+import logging
+
 import numpy as np
 import pandas as pd
 
 SIMILARITY_THRESHOLD = 0.7
+
+
+logger = logging.getLogger(__name__)
 
 
 def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
@@ -17,7 +22,7 @@ def detect_duplicate(metadata_df: pd.DataFrame) -> pd.Series:
         right=metadata_df_shifted,
         left_index=True,
         right_index=True,
-    ).dropna()
+    ).dropna(subset=["path_x", "path_y"])
 
     metadata_df_merged["distance"] = (
         (metadata_df_merged["lat_x"] - metadata_df_merged["lat_y"]).pow(2)
@@ -53,6 +58,8 @@ def detect_duplicate(metadata_df: pd.DataFrame) -> pd.Series:
     metadata_df_merged_deep["duplicated_path"] = metadata_df_merged_deep[
         "duplicated_path"
     ].ffill()
+
+    logger.info(f"Found {len(metadata_df_merged_deep)} duplicates")
 
     metadata_df = pd.merge(
         left=metadata_df,

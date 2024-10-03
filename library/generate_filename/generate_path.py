@@ -8,11 +8,11 @@ parser = Lark(GRAMMAR, parser="lalr")
 
 
 def generate_filename(df: pd.DataFrame, format: str) -> pd.Series | str:
-    df["index"] = pd.Index(range(len(df)))
-
     tree = parser.parse(format)
 
-    res = FilenameTransformer(df).transform(tree) + df["ext"]
+    res = FilenameTransformer(df).transform(tree)
+    res = res.astype("str") if isinstance(res, pd.Series) else res
+    res += df["ext"]
     res = res.rename("new_filename")
 
     return res

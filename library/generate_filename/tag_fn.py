@@ -24,12 +24,6 @@ def tag_number(
     return res
 
 
-def tag_index(
-    series: pd.Series, pad: Optional[int] = None, start: int = 0
-) -> pd.Series:
-    return tag_number(series=series + start, pad=pad)
-
-
 def tag_uuid(df: pd.DataFrame) -> pd.Series:
     return pd.Series([str(uuid.uuid4()) for _ in range(len(df))], index=df.index)
 
@@ -69,7 +63,12 @@ def tag_concat(df: pd.DataFrame, *args: pd.Series | str) -> pd.Series:
 
 TAGS: dict[str, TagFn] = {
     "date": tag_fn_wrapper("creation_time", tag_datetime),
-    "index": tag_fn_wrapper("index", tag_index),
+    "index": tag_fn_wrapper("global_index", tag_number),
+    "original_index": tag_fn_wrapper("original_index", tag_number),
+    "duplicate_index": tag_fn_wrapper("duplicate_index", tag_number),
+    "group_index": tag_fn_wrapper("group_global_index", tag_number),
+    "group_original_index": tag_fn_wrapper("group_original_index", tag_number),
+    "group_duplicate_index": tag_fn_wrapper("group_duplicate_index", tag_number),
     "filename": tag_fn_wrapper(
         lambda df: df["path"].map(lambda x: x.stem), lambda series: series
     ),

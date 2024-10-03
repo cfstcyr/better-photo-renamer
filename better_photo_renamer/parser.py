@@ -61,6 +61,12 @@ input_args.add_argument(
     help="Timezone to use for creation time",
 )
 
+input_args.add_argument(
+    "--cache",
+    action="store_true",
+    help="Use cache for metadata extraction",
+)
+
 output_args = arg_parser.add_argument_group(
     "Output",
     "Output options",

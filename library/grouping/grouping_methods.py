@@ -24,7 +24,7 @@ def _group_k_means_auto(
     score, best_k, result = -1, -1, None
     lower_score_count = 0
 
-    for k in tqdm(range(2, k_max + 1)):
+    for k in tqdm(range(2, k_max + 1), desc="Finding optimal number of groups"):
         k_means = KMeans(n_clusters=k, random_state=0)
         labels = k_means.fit_predict(metadata_df[group_cols])
         new_score = silhouette_score(metadata_df[group_cols], labels)

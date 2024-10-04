@@ -1,6 +1,9 @@
+from datetime import datetime, timedelta
 from typing import Literal
 
 import pandas as pd
+
+SeriesBound = bytes | bool | int | float | complex | datetime | timedelta
 
 Pad = int | Literal["auto"]
 

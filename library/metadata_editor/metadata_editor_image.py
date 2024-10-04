@@ -9,12 +9,12 @@ from library.utils.exif import exif_to_tag
 from library.utils.gps import convert_gps_to_decimal
 from library.utils.hash import hash_dict
 
-from .metadata_extractor import Metadata, MetadataExtractor
+from .metadata_editor import Metadata, MetadataEditor
 
 logger = logging.getLogger(__name__)
 
 
-class MetadataExtractorImage(MetadataExtractor):
+class MetadataEditorImage(MetadataEditor):
     _allowed_extensions = [".jpg", ".jpeg", ".png", ".heic"]
     _creation_time_keys = ["0th.DateTime"]
 
@@ -46,7 +46,7 @@ class MetadataExtractorImage(MetadataExtractor):
             )
 
         logger.warning(f"No GPS data found in {path}")
-        return -1, -1
+        return np.nan, np.nan
 
     def _extract_content_hash(self, path: Path, img: Image.Image) -> np.ndarray:
         img = img.resize((100, 100), Image.Resampling.LANCZOS)

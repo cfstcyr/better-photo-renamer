@@ -3,11 +3,12 @@ import re
 from pathlib import Path
 
 import ffmpeg
+import numpy as np
 
 from library.utils.errors import ExtractionError
 from library.utils.hash import hash_dict
 
-from .metadata_extractor import Metadata, MetadataExtractor
+from .metadata_editor import Metadata, MetadataEditor
 
 GPS_ISO6709_TAG = "com.apple.quicktime.location.ISO6709"
 GPS_ISO6709_REGEX = (
@@ -17,7 +18,7 @@ GPS_ISO6709_REGEX = (
 logger = logging.getLogger(__name__)
 
 
-class MetadataExtractorMov(MetadataExtractor):
+class MetadataEditorMov(MetadataEditor):
     _allowed_extensions = [".mov"]
     _creation_time_keys = ["com.apple.quicktime.creationdate", "creation_time"]
 
@@ -47,4 +48,4 @@ class MetadataExtractorMov(MetadataExtractor):
                 )
 
         logger.warning(f"No GPS data found in {path}")
-        return -1, -1
+        return np.nan, np.nan

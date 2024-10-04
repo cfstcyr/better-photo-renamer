@@ -16,17 +16,17 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class MetadataExtractorConfig:
+class MetadataEditorConfig:
     tz: tzinfo = timezone("Europe/Paris")
     extract_content_hash: bool = False
 
 
-class MetadataExtractor(ABC):
-    config: MetadataExtractorConfig
+class MetadataEditor(ABC):
+    config: MetadataEditorConfig
     _allowed_extensions: list[str]
     _creation_time_keys: list[str]
 
-    def __init__(self, config: MetadataExtractorConfig) -> None:
+    def __init__(self, config: MetadataEditorConfig) -> None:
         self.config = config
 
     def extract(self, path: Path | str) -> Metadata:
@@ -36,7 +36,7 @@ class MetadataExtractor(ABC):
             raise ExtractionError(f"Error extracting metadata from {path}: {e}")
 
     @classmethod
-    def can_extract(cls, path: Path) -> bool:
+    def can_edit(cls, path: Path) -> bool:
         return path.suffix.lower() in cls._allowed_extensions
 
     @abstractmethod

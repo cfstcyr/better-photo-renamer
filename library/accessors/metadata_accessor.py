@@ -1,6 +1,6 @@
 import pandas as pd
 
-from library.metadata_extractor import Metadata
+from library.metadata_editor import Metadata
 
 
 @pd.api.extensions.register_dataframe_accessor("metadata")

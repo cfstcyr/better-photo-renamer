@@ -17,7 +17,7 @@ from library.grouping.grouping import group_by_metadata
 from library.indexer import index_metadata
 from library.load_dir import load_dir
 from library.load_metadata import load_metadata
-from library.metadata_extractor.metadata_extractor import MetadataExtractorConfig
+from library.metadata_editor.metadata_editor import MetadataEditorConfig
 
 from .parser import arg_parser
 
@@ -33,7 +33,7 @@ start = datetime.now()
 
 
 paths = load_dir(args.dir, recursive=args.recursive)
-metadata_config = MetadataExtractorConfig(
+metadata_config = MetadataEditorConfig(
     tz=timezone(args.tz),
     extract_content_hash=args.extract_content_hash,
 )
@@ -69,6 +69,10 @@ else:
     metadata_rename_df = metadata_df
 
 if metadata_rename_df["new_path"].duplicated().any():
+    duplicate_df = metadata_rename_df[metadata_rename_df["new_path"].duplicated()]
+    duplicate_df["path"] = duplicate_df["path"].apply(lambda x: x.name)
+    duplicate_df["new_path"] = duplicate_df["new_path"].apply(lambda x: x.name)
+    logger.error(duplicate_df)
     raise ValueError("Duplicate paths")
 
 metadata_rename_df = metadata_rename_df[
@@ -89,6 +93,7 @@ apply_changes(
     paths=metadata_rename_df["path"],
     new_paths=metadata_rename_df["new_path"],
     file_operator=FILE_OPERATORS[args.operator],
+    metadata_editor_config=metadata_config,
     ask_confirm=args.ask_confirm,
 )
 

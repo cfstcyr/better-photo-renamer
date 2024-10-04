@@ -5,16 +5,16 @@ import pandas as pd
 from tqdm import tqdm
 
 from library.cache import Cache
-from library.metadata_extractor import Metadata
+from library.metadata_editor import Metadata
 from library.utils.df import explode_dict
 
-from .metadata_extractor import MetadataExtractorConfig, create_metadata_extractor
+from .metadata_editor import MetadataEditorConfig, create_metadata_editor
 
 logger = logging.getLogger(__name__)
 
 
 def _load_metadata_from_path(
-    path: Path, metadata_config: MetadataExtractorConfig, cache: Cache | None = None
+    path: Path, metadata_config: MetadataEditorConfig, cache: Cache | None = None
 ) -> Metadata:
     path_str = str(path)
     if cache is not None and cache.has(path_str):
@@ -26,7 +26,7 @@ def _load_metadata_from_path(
 
         logger.warning(f"Cache hit is None: {path}")
 
-    metadata = create_metadata_extractor(path, config=metadata_config).extract(path)
+    metadata = create_metadata_editor(path, config=metadata_config).extract(path)
 
     if cache is not None:
         cache.set(path_str, metadata)
@@ -36,7 +36,7 @@ def _load_metadata_from_path(
 
 def load_metadata(
     paths: list[Path],
-    metadata_config: MetadataExtractorConfig,
+    metadata_config: MetadataEditorConfig,
     cache: Cache | None = None,
 ) -> pd.DataFrame:
     df = pd.DataFrame(

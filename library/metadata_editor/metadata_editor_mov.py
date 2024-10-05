@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class MetadataEditorMov(MetadataEditor):
-    _allowed_extensions = [".mov"]
+    _allowed_extensions = [".mov", ".mp4"]
     _creation_time_keys = ["com.apple.quicktime.creationdate", "creation_time"]
 
     def _extract(self, path: Path) -> Metadata:

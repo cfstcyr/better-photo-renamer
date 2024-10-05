@@ -1,4 +1,4 @@
-from datetime import datetime, tzinfo
+from datetime import datetime, timedelta, timezone, tzinfo
 from typing import Optional
 
 DATETIME_FORMATS = [
@@ -7,6 +7,12 @@ DATETIME_FORMATS = [
     "%Y-%m-%dT%H:%M:%S%z",
     "%Y-%m-%dT%H:%M:%SZ",
 ]
+
+
+def parse_tz(tz_str: str) -> timezone:
+    hours, minutes = tz_str.split(":")
+
+    return timezone(timedelta(hours=int(hours), minutes=int(minutes)))
 
 
 def strptime_multi(
@@ -32,6 +38,6 @@ def strptime_multi(
         raise ValueError(f"Could not parse date: {date_string}")
 
     if date.tzinfo is None:
-        date = date.astimezone(tz)
+        date = date.replace(tzinfo=tz)
 
     return date

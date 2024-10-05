@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from pathlib import Path
 
 import numpy as np
@@ -16,7 +17,6 @@ logger = logging.getLogger(__name__)
 
 class MetadataEditorImage(MetadataEditor):
     _allowed_extensions = [".jpg", ".jpeg", ".png", ".heic"]
-    _creation_time_keys = ["0th.DateTime"]
 
     def _extract(self, path: Path) -> Metadata:
         img = Image.open(path)
@@ -37,6 +37,12 @@ class MetadataEditorImage(MetadataEditor):
             lat=lat,
             long=long,
         )
+
+    def _extract_creation_time(self, path: Path, tags: dict) -> datetime:
+        datetime_str = tags["0th"].get("DateTime")
+        offset_time_str = tags["Exif"].get("OffsetTime")
+
+        return super()._extract_creation_time(path, datetime_str, offset_time_str)
 
     def _extract_gps_data(self, path: Path, tags: dict) -> tuple[float, float]:
         if self._has_gps_data(tags):

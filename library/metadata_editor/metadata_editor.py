@@ -6,8 +6,7 @@ from pathlib import Path
 
 from pytz import timezone
 
-from library.utils.datetime import strptime_multi
-from library.utils.dict import get_dict_value
+from library.utils.datetime import parse_tz, strptime_multi
 from library.utils.errors import ExtractionError
 
 from .metadata import Metadata
@@ -24,7 +23,6 @@ class MetadataEditorConfig:
 class MetadataEditor(ABC):
     config: MetadataEditorConfig
     _allowed_extensions: list[str]
-    _creation_time_keys: list[str]
 
     def __init__(self, config: MetadataEditorConfig) -> None:
         self.config = config
@@ -42,15 +40,24 @@ class MetadataEditor(ABC):
     @abstractmethod
     def _extract(self, path: Path) -> Metadata: ...
 
-    def _extract_creation_time(self, path: Path, tags: dict) -> datetime:
-        for key in self._creation_time_keys:
-            value = get_dict_value(tags, key)
-            if value is not None:
-                return strptime_multi(
-                    date_string=value,
-                    tz=self.config.tz,
-                    default_format="%Y-%m-%dT%H:%M:%S.%fZ",
-                )
+    def _extract_creation_time(
+        self, path: Path, datetime_str: str | None, tz_str: str | None = None
+    ) -> datetime:
+        if datetime_str is not None:
+            if tz_str:
+                tz = parse_tz(tz_str)
+            else:
+                tz = self.config.tz
+
+            res = strptime_multi(
+                date_string=datetime_str,
+                tz=tz,
+                default_format="%Y-%m-%dT%H:%M:%S.%fZ",
+            )
+
+            logger.debug(f"Converted date {datetime_str} to {res} for {path}")
+
+            return res
 
         creation_time = datetime.fromtimestamp(path.stat().st_ctime, tz=self.config.tz)
         logger.warning(

@@ -1,5 +1,6 @@
 import logging
 import re
+from datetime import datetime
 from pathlib import Path
 
 import ffmpeg
@@ -36,6 +37,13 @@ class MetadataEditorMov(MetadataEditor):
             lat=lat,
             long=long,
         )
+
+    def _extract_creation_time(self, path: Path, tags: dict) -> datetime:
+        for creation_time_key in self._creation_time_keys:
+            if creation_time_key in tags:
+                return super()._extract_creation_time(path, tags[creation_time_key])
+
+        return super()._extract_creation_time(path, None)
 
     def _extract_gps_data(self, path: Path, tags: dict) -> tuple[float, float]:
         if GPS_ISO6709_TAG in tags:

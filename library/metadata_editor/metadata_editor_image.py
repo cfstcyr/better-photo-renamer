@@ -20,9 +20,21 @@ class MetadataEditorImage(MetadataEditor):
 
     def _extract(self, path: Path) -> Metadata:
         img = Image.open(path)
-        tags = exif_to_tag(piexif.load(img.info.get("exif")))
 
-        lat, long = self._extract_gps_data(path, tags)
+        try:
+            tags = exif_to_tag(piexif.load(img.info.get("exif")))
+
+            metadata_hash = hash_dict(tags)
+            lat, long = self._extract_gps_data(path, tags)
+            creation_time = self._extract_creation_time(path, tags)
+        except Exception as e:
+            logger.warning(f"Could not extract metadata from EXIF for '{path}': {e}")
+            logger.info(f"Replacing metadata by default values for '{path}'")
+
+            metadata_hash = ""
+            lat, long = self._extract_gps_data(path, {})
+            creation_time = self._extract_creation_time(path, {})
+
         content_hash = (
             self._extract_content_hash(path, img)
             if self.config.extract_content_hash
@@ -30,17 +42,17 @@ class MetadataEditorImage(MetadataEditor):
         )
 
         return Metadata(
-            metadata_hash=hash_dict(tags),
+            metadata_hash=metadata_hash,
             content_hash=content_hash,
-            creation_time=self._extract_creation_time(path, tags),
+            creation_time=creation_time,
             is_live_photo=False,
             lat=lat,
             long=long,
         )
 
     def _extract_creation_time(self, path: Path, tags: dict) -> datetime:
-        datetime_str = tags["0th"].get("DateTime")
-        offset_time_str = tags["Exif"].get("OffsetTime")
+        datetime_str = tags.get("0th", {}).get("DateTime")
+        offset_time_str = tags.get("Exif", {}).get("OffsetTime")
 
         return super()._extract_creation_time(path, datetime_str, offset_time_str)
 

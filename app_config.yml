@@ -1,0 +1,9 @@
+core:
+  logging:
+    version: 1
+    handlers:
+      console:
+        class: rich.logging.RichHandler
+    root:
+      level: INFO
+      handlers: [console]

@@ -6,7 +6,7 @@ authors = ["Charles S <cfstcyr.git@pm.me>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.12,<3.13"
 pandas = "^2.2.2"
 pillow = "^10.4.0"
 pillow-heif = "^0.18.0"
@@ -26,6 +26,13 @@ ruff = "^0.6.3"
 mypy = "^1.11.2"
 types-pytz = "^2024.1.0.20240417"
 pandas-stubs = "^2.2.2.240807"
+
+
+
+[tool.poetry.group.app.dependencies]
+pyside6 = "^6.7.3"
+dependency-injector = {extras = ["yaml"], version = "^4.42.0"}
+reactivex = "^4.0.4"
 
 [build-system]
 requires = ["poetry-core"]

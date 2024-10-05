@@ -22,5 +22,5 @@ def create_metadata_editor(
             return editor(config)
 
     raise FactoryError(
-        f"Cannot create {MetadataEditor.__name__}: Unsupported file extension: {path.suffix}"
+        f"Cannot create {MetadataEditor.__name__}: Unsupported file extension: {path.suffix} (for '{path}')"
     )

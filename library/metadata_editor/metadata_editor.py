@@ -31,7 +31,10 @@ class MetadataEditor(ABC):
         try:
             return self._extract(Path(path))
         except ExtractionError as e:
-            raise ExtractionError(f"Error extracting metadata from {path}: {e}")
+            raise ExtractionError(f"Error extracting metadata from '{path}': {e}")
+        except Exception as e:
+            logger.error(f"Unknown error extracting '{path}'")
+            raise e
 
     @classmethod
     def can_edit(cls, path: Path) -> bool:

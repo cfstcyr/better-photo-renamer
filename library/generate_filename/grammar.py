@@ -11,9 +11,10 @@ GRAMMAR = rf"""
     ?params_k: param_k ["," params_k]               -> params_k
 
     ?param_v: STRING | NUMBER | tag
-    ?param_k: NAME "=" param_v  -> param_k
+    ?param_k: PARAM_KEY "=" param_v  -> param_k
 
-    NAME: /([A-Za-z0-9]| |-|_|\/)+/
+    NAME: /(\w| |-|_|\/)+/
+    PARAM_KEY: /([A-Za-z0-9]|-|_|\/)+/
     TAG: {" | ".join(map(lambda tag: f"\"{tag}\"", TAGS.keys()))}
 
     %import common.ESCAPED_STRING   -> STRING

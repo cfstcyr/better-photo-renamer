@@ -24,6 +24,19 @@ def group_by_metadata(
         extra={"markup": True},
     )
 
-    return GROUPING_METHODS[grouping_args.method](
-        metadata_df, grouping_args.group_cols, **grouping_args.params
+    valid_grouping_rows = metadata_df[grouping_args.group_cols].notnull().all(axis=1)
+
+    logger.info(
+        f"Excluding {metadata_df.shape[0] - valid_grouping_rows.sum()} rows with missing metadata"
     )
+
+    metadata_df["group"] = -1
+    metadata_df.loc[valid_grouping_rows, "group"] = GROUPING_METHODS[
+        grouping_args.method
+    ](
+        metadata_df[valid_grouping_rows],
+        grouping_args.group_cols,
+        **grouping_args.params,
+    )
+
+    return metadata_df

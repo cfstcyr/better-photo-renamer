@@ -1,9 +1,12 @@
+import logging
 from typing import Any
 
 import pandas as pd
 from lark import Transformer
 
 from .tag_fn import TAGS
+
+logger = logging.getLogger(__name__)
 
 
 class FilenameTransformer(Transformer[Any, str | pd.Series]):
@@ -24,6 +27,8 @@ class FilenameTransformer(Transformer[Any, str | pd.Series]):
     def tag(self, items):
         (tag,) = items
 
+        logger.info(f"Executing tag <{tag}>")
+
         return TAGS[tag](self.df)
 
     def tag_params(self, items):
@@ -32,6 +37,10 @@ class FilenameTransformer(Transformer[Any, str | pd.Series]):
         args_list = list({k: v for k, v in args.items() if isinstance(k, int)}.values())
         args_list.reverse()
         kwargs_dict = {k: v for k, v in args.items() if isinstance(k, str)}
+
+        logger.info(
+            f"Executing tag <{tag}:{",".join(args_list)}{"," if args_list and kwargs_dict else ""}{",".join(f"{key}={value}" for key, value in kwargs_dict.items())}>"
+        )
 
         return TAGS[tag](self.df, *args_list, **kwargs_dict)
 

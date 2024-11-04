@@ -11,7 +11,7 @@ packages = [
 
 
 [tool.poetry.scripts]
-better-renamer = "cli.__main__:main"
+better-renamer = "cli.__main__:app"
 
 
 [tool.poetry.dependencies]

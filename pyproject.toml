@@ -1,9 +1,18 @@
 [tool.poetry]
-name = "better-renamer"
-version = "0.1.0"
+name = "better_renamer"
+version = "0.1.1"
 description = ""
 authors = ["Charles S <cfstcyr.git@pm.me>"]
 readme = "README.md"
+packages = [
+    {include = "better_renamer", from="."}, 
+    {include = "library", from="."}, 
+]
+
+
+[tool.poetry.scripts]
+better-renamer = "better_renamer.__main__:main"
+
 
 [tool.poetry.dependencies]
 python = "^3.12,<3.13"
@@ -26,7 +35,6 @@ ruff = "^0.6.3"
 mypy = "^1.11.2"
 types-pytz = "^2024.1.0.20240417"
 pandas-stubs = "^2.2.2.240807"
-
 
 
 [tool.poetry.group.app.dependencies]

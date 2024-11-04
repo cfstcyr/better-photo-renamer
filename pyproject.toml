@@ -1,17 +1,17 @@
 [tool.poetry]
-name = "better_renamer"
+name = "better-renamer"
 version = "0.1.1"
 description = ""
 authors = ["Charles S <cfstcyr.git@pm.me>"]
 readme = "README.md"
 packages = [
-    {include = "better_renamer", from="."}, 
+    {include = "cli", from="."}, 
     {include = "library", from="."}, 
 ]
 
 
 [tool.poetry.scripts]
-better-renamer = "better_renamer.__main__:main"
+better-renamer = "cli.__main__:main"
 
 
 [tool.poetry.dependencies]

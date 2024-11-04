@@ -43,7 +43,7 @@ input_args.add_argument(
     "--dir",
     "-d",
     type=str,
-    required=True,
+    default=".",
     help="Directory to scan for photos",
 )
 
